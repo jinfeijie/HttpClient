@@ -44,7 +44,7 @@ composer require jinfeijie/http-client -vvv
                 ->send();
             $result = (string)$promise->wait()->getBody();
             ```
-        2. 手动解析
+        2. 自动解析
             ```
             $result  = (new AsyncClient('https://jinfeijie.cn'))
                 ->setAuth(['jinfeijie','whoami'])
