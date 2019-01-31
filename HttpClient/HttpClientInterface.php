@@ -12,6 +12,16 @@ namespace HttpClient;
 
 interface HttpClientInterface
 {
+
+    /**
+     * 设置主域
+     *
+     * @param string $uri
+     *
+     * @return mixed
+     */
+    public function setBaseUri(string $uri);
+
     public function getOptions();
 
     /**

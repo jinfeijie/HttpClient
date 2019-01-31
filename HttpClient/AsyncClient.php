@@ -23,12 +23,27 @@ class AsyncClient extends BaseClient
     protected $contentType = 'text/html';
     protected $forceContentType = '';
 
+    /**
+     * AsyncClient constructor.
+     */
+    public function __construct(){
+        return $this;
+    }
 
-    public function __construct($base_uri, $method = 'POST')
+    /**
+     * 获取连接的客户端
+     * @param string $base_uri
+     * @param string $method
+     *
+     * @return AsyncClient
+     */
+    public function getClient($base_uri = '', $method = 'POST')
     {
         $this->base_uri = $base_uri;
         $this->method = $method;
-        parent::__construct($this->base_uri, $this->method, $this->type);
+        if (!empty($this->base_uri)) {
+            $this->setBaseUri($this->base_uri);
+        }
         return $this;
     }
 
@@ -61,17 +76,25 @@ class AsyncClient extends BaseClient
                     ]);
                     return false;
                 }
-
                 break;
             default:
                 return false;
         }
     }
 
-    public function getContent($uri = '/')
+    /**
+     * 获取内容
+     * @param string $uri
+     * @param bool   $format
+     * @param bool   $base64
+     *
+     * @return bool|mixed|string
+     */
+    public function getContent($uri = '/', $format = false, $base64 = false)
     {
         $this->uri = $uri;
         $this->type = empty($this->type) ? '' : 'Async';
+        $return = '';
         switch (strtolower($this->method)) {
             case 'get' :
             case 'post' :
@@ -81,19 +104,73 @@ class AsyncClient extends BaseClient
             case 'delete' :
                 $method = strtolower($this->method) . $this->type;
                 try {
-                    return (string)$this->client->$method($this->uri, $this->options)->wait()->getBody();
+                    $return = $this->client->$method($this->uri, $this->options)->wait();
                 } catch (\Exception $e) {
                     Log::error(__METHOD__, [
                         'line' => $e->getLine(),
                         'msg'  => $e->getMessage(),
                         'code' => $e->getCode(),
                     ]);
-                    return false;
+                    return $return;
                 }
 
                 break;
             default:
                 return false;
+        }
+        $body = (string)$return->getBody();
+        $contentType = $return->getHeaderLine('content-type');
+        if ($format) {
+            return $this->formatContent($body, $contentType, $base64);
+        }
+        return $body;
+    }
+
+    /**
+     * 格式化返回的数据
+     *
+     * @param      $body
+     * @param      $contentType
+     * @param bool $base64
+     *
+     * @return mixed|string
+     */
+    protected function formatContent($body, $contentType, $base64 = false)
+    {
+        $type = explode(";", $contentType)[0];
+        if (empty($type)) {
+            $type = $this->contentType;
+        }
+
+        if ($this->forceContentType) {
+            $type = $this->contentType;
+        }
+
+
+        switch ($type) {
+            case 'image/jpeg':
+            case 'image/png':
+            case 'text/html':
+                if ($base64) {
+                    return base64_encode($body);
+                }
+                return $body;
+                break;
+            case 'application/json':
+                if ($base64) {
+                    return base64_encode($body);
+                }
+                $ret = json_decode($body, true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    return $body;
+                }
+                return $ret;
+                break;
+            default:
+                if ($base64) {
+                    return base64_encode($body);
+                }
+                return $body;
         }
     }
 }

@@ -17,12 +17,36 @@ class TestHttpClient extends TestCase
 {
     public function testGet()
     {
-        $string  = (new HttpClient('https://jinfeijie.cn', 'GET'))
+        $string  = (new HttpClient())
+            ->getClient('https://jinfeijie.cn', 'GET')
             ->setAuth(['jinfeijie','whoami'])
             ->send();
 
         $this->setResult($string);
         echo $this->getResult();
+        $this->assertIsString($string);
+    }
+
+    public function testGetJsonString()
+    {
+        $string  = (new HttpClient())
+            ->getClient('https://jinfeijie.cn/', 'GET')
+            ->setAuth(['jinfeijie','whoami'])
+            ->send('weixin/a.php');
+
+        $this->setResult($string);
+        echo $this->getResult();
+        $this->assertIsString($string);
+    }
+    public function testGetJsonFormat()
+    {
+        $string  = (new HttpClient())
+            ->getClient('https://jinfeijie.cn/', 'GET')
+            ->setAuth(['jinfeijie','whoami'])
+            ->send('weixin/a.php', true);
+
+        $this->setResult($string);
+        var_dump($this->getResult());
         $this->assertIsString($string);
     }
 }
