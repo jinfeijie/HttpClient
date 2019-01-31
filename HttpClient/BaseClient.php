@@ -29,7 +29,9 @@ class BaseClient implements HttpClientInterface
     {
         $this->base_uri = $base_uri;
         $this->method = $method;
-        $this->client = new Client(['base_uri' => $this->base_uri]);
+        if (!empty($this->base_uri)) {
+            $this->setBaseUri($this->base_uri);
+        }
         $this->type = $type;
         return $this;
     }
@@ -98,7 +100,7 @@ class BaseClient implements HttpClientInterface
      *
      * @param float $second
      *
-     * @return BaseClient
+     * @return $this
      */
     public function setTimeOut($second)
     {
@@ -117,7 +119,7 @@ class BaseClient implements HttpClientInterface
      * @param array  $params  默认是string  || 传入 array     || 任意内容
      * @param string $options 默认是空      ||     json       || stream
      *
-     * @return BaseClient
+     * @return $this
      */
     public function setParams($params, $options = '')
     {
@@ -163,7 +165,7 @@ class BaseClient implements HttpClientInterface
      *
      * @param bool $allow
      *
-     * @return BaseClient
+     * @return $this
      */
     public function setAllowRedirects(bool $allow = false)
     {
@@ -207,12 +209,28 @@ class BaseClient implements HttpClientInterface
      *
      * @param bool $force 强制，返回时无类型的内容转码失败时的兜底
      *
-     * @return BaseClient
+     * @return $this
      */
     public function setContentType($type, $force = false)
     {
         $this->contentType = (string)$type;
         $this->forceContentType = $force;
+        return $this;
+    }
+
+    /**
+     * 设置主域
+     *
+     * @param string $uri
+     *
+     * @return $this
+     */
+    public function setBaseUri(string $uri)
+    {
+        if ($this->client === null) {
+            $this->base_uri = $uri;
+            $this->client = new Client(['base_uri' => $this->base_uri]);
+        }
         return $this;
     }
 }

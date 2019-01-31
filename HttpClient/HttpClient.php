@@ -10,7 +10,6 @@
 namespace HttpClient;
 
 use Illuminate\Support\Facades\Log;
-use Symfony\Contracts\Service\ResetInterface;
 
 class HttpClient extends BaseClient
 {
@@ -24,28 +23,11 @@ class HttpClient extends BaseClient
     protected $forceContentType = '';
 
 
-    public function __construct($base_uri, $method = 'POST')
+    public function __construct($base_uri = '', $method = 'POST')
     {
         $this->base_uri = $base_uri;
         $this->method = $method;
         parent::__construct($this->base_uri, $this->method, $this->type);
-    }
-    
-    /**
-     * 同步请求
-     *
-     * @param        $base_uri
-     *
-     *                                    主域名，比如请求 https://baidu.com/sb 这里只需要输入 https://baidu.com/
-     *                                    具体参考 https://i.loli.net/2019/01/30/5c51963f4143e.png 或
-     *                                    https://ws3.sinaimg.cn/large/005BYqpggy1fzovncewm8j31c80je0uk.jpg
-     * @param string $method
-     *
-     * @return HttpClient
-     */
-    public function getClient($base_uri, $method = 'POST')
-    {
-
     }
 
     /**
@@ -53,10 +35,10 @@ class HttpClient extends BaseClient
      *
      * @param string $uri
      *
-     * @param bool   $format     是否格式化
-     * @param bool   $base64     是否base64，比较适用于图片的数据流转码
+     * @param bool   $format 是否格式化
+     * @param bool   $base64 是否base64，比较适用于图片的数据流转码
      *
-     * @return ResetInterface
+     * @return bool|mixed|string
      */
     public function send($uri = '/', $format = false, $base64 = false)
     {
