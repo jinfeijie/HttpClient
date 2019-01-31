@@ -1,0 +1,29 @@
+{
+    "name": "jinfeijie/http-client",
+    "description": "这是一个简单的Http客户端",
+    "keywords": ["http-client", "http客户端", "异步","同步"],
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "ext-json": "*"
+    },
+    "require-dev":{
+        "barryvdh/laravel-ide-helper": "^2.4",
+        "phpunit/phpunit": "^7.5"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "HttpClient\\": "HttpClient/"
+        }
+    },
+
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "jinfeijie",
+            "email": "me@jinfeijie.cn"
+        }
+    ],
+    "minimum-stability": "alpha"
+}
