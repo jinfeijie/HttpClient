@@ -17,7 +17,8 @@ class TestAsyncClient extends TestCase
 {
     public function testAsyncGet()
     {
-        $promise = (new AsyncClient('https://jinfeijie.cn', 'GET'))
+        $promise = (new AsyncClient())
+            ->getClient('https://jinfeijie.cn', 'GET')
             ->setAuth(['jinfeijie', 'whoami'])
             ->send();
 
@@ -29,7 +30,8 @@ class TestAsyncClient extends TestCase
 
     public function testAsyncGetWait()
     {
-        $promise = (new AsyncClient('https://jinfeijie.cn', 'GET'))
+        $promise = (new AsyncClient())
+            ->getClient('https://jinfeijie.cn', 'GET')
             ->setAuth(['jinfeijie', 'whoami'])
             ->send();
 
@@ -41,7 +43,8 @@ class TestAsyncClient extends TestCase
 
     public function testAsyncPost()
     {
-        $promise = (new AsyncClient('https://jinfeijie.cn', 'POST'))
+        $promise = (new AsyncClient())
+            ->getClient('https://jinfeijie.cn', 'POST')
             ->setAuth(['jinfeijie', 'whoami'])
             ->send();
 
@@ -53,7 +56,8 @@ class TestAsyncClient extends TestCase
 
     public function testAsyncPostWait()
     {
-        $promise = (new AsyncClient('https://jinfeijie.cn', 'POST'))
+        $promise = (new AsyncClient())
+            ->getClient('https://jinfeijie.cn', 'POST')
             ->setAuth(['jinfeijie', 'whoami'])
             ->send();
 
@@ -65,7 +69,8 @@ class TestAsyncClient extends TestCase
 
     public function testAsyncJson()
     {
-        $results = (new AsyncClient('https://jinfeijie.cn', 'GET'))
+        $results = (new AsyncClient())
+            ->getClient('https://jinfeijie.cn', 'GET')
             ->setAuth(['jinfeijie', 'whoami'])
             ->setContentType('application/json', true)
             ->getContent('weixin/a.php', true);

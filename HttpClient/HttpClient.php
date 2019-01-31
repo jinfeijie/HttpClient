@@ -31,6 +31,23 @@ class HttpClient extends BaseClient
     }
 
     /**
+     * 获取连接的客户端
+     * @param string $base_uri
+     * @param string $method
+     *
+     * @return HttpClient
+     */
+    public function getClient($base_uri = '', $method = 'POST')
+    {
+        $this->base_uri = $base_uri;
+        $this->method = $method;
+        if (!empty($this->base_uri)) {
+            $this->setBaseUri($this->base_uri);
+        }
+        return $this;
+    }
+
+    /**
      * 发送请求
      *
      * @param string $uri

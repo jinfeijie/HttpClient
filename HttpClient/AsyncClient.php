@@ -23,12 +23,27 @@ class AsyncClient extends BaseClient
     protected $contentType = 'text/html';
     protected $forceContentType = '';
 
-
     public function __construct($base_uri = '', $method = 'POST')
     {
         $this->base_uri = $base_uri;
         $this->method = $method;
         parent::__construct($this->base_uri, $this->method, $this->type);
+    }
+    /**
+     * 获取连接的客户端
+     * @param string $base_uri
+     * @param string $method
+     *
+     * @return AsyncClient
+     */
+    public function getClient($base_uri = '', $method = 'POST')
+    {
+        $this->base_uri = $base_uri;
+        $this->method = $method;
+        if (!empty($this->base_uri)) {
+            $this->setBaseUri($this->base_uri);
+        }
+        return $this;
     }
 
     /**
